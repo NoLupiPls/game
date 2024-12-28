@@ -21,72 +21,96 @@ class LevelParser:
     TEXTURE_PATHS = {
         # Блоки
         "dirt": {
-            "default": "assets/blocks/dirt/dirt.png",
-            "vertical": "assets/blocks/dirt/dirt_vertical.png",
-            "horizontal": "assets/blocks/dirt/dirt_horizontal.png",
-            "top": "assets/blocks/dirt/dirt_top.png",
-            "bottom": "assets/blocks/dirt/dirt_bottom.png",
-            "isolated": "assets/blocks/dirt/dirt_isolated.png",
-            "black": "assets/blocks/dirt/dirt_black.png",
-            "top_bottom_left": "assets/blocks/dirt/dirt_atbl.png",
-            "top_bottom_right": "assets/blocks/dirt/dirt_atbr.png",
-            "top_left_right": "assets/blocks/dirt/dirt_black.png",
-            "bottom_left_right": "assets/blocks/dirt/dirt_ablr.png",
-            "angle_top_left": "assets/blocks/dirt/dirt_atl.png",
-            "angle_top_right": "assets/blocks/dirt/dirt_atr.png",
-            "angle_bottom_left": "assets/blocks/dirt/dirt_abl.png",
-            "angle_bottom_right": "assets/blocks/dirt/dirt_abr.png",
+            "default": "assets/images/platform/blocks/dirt/dirt.png",
+            "vertical": "assets/images/platform/blocks/dirt/dirt_vertical.png",
+            "horizontal": "assets/images/platform/blocks/dirt/dirt_blr.png",
+            "top": "assets/images/platform/blocks/dirt/dirt_top.png",
+            "bottom": "assets/images/platform/blocks/dirt/dirt_bottom.png",
+            "left": "assets/images/platform/blocks/dirt/dirt_left.png",
+            "right": "assets/images/platform/blocks/dirt/dirt_right.png",
+            "isolated": "assets/images/platform/blocks/dirt/dirt_isolated.png",
+            "black": "assets/images/platform/blocks/dirt/dirt_black.png",
+            "top_bottom_left": "assets/images/platform/blocks/dirt/dirt_tbr.png",
+            "top_bottom_right": "assets/images/platform/blocks/dirt/dirt_tbl.png",
+            "top_left_right": "assets/images/platform/blocks/dirt/dirt_black.png",
+            "bottom_left_right": "assets/images/platform/blocks/dirt/dirt_blr.png",
+            "angle_top_left": "assets/images/platform/blocks/dirt/dirt_atl.png",
+            "angle_top_right": "assets/images/platform/blocks/dirt/dirt_atr.png",
+            "angle_bottom_left": "assets/images/platform/blocks/dirt/dirt_abl.png",
+            "angle_bottom_right": "assets/images/platform/blocks/dirt/dirt_abr.png",
         },
         "ice": {
-            "default": "assets/blocks/ice/ice.png",
-            "vertical": "assets/blocks/ice/ice_vertical.png",
-            "horizontal": "assets/blocks/ice/ice_horizontal.png",
-            "top": "assets/blocks/ice/ice_top.png",
-            "bottom": "assets/blocks/ice/ice_bottom.png",
-            "isolated": "assets/blocks/ice/ice_isolated.png",
-            "black": "assets/blocks/ice/ice_black.png",
-            "top_bottom_left": "assets/blocks/ice/ice_tbl.png",
-            "top_bottom_right": "assets/blocks/ice/ice_tbr.png",
-            "top_left_right": "assets/blocks/ice/ice_tlr.png",
-            "bottom_left_right": "assets/blocks/ice/ice_blr.png",
-            "angle_top_left": "assets/blocks/ice/ice_atl.png",
-            "angle_top_right": "assets/blocks/ice/ice_atr.png",
-            "angle_bottom_left": "assets/blocks/ice/ice_abl.png",
-            "angle_bottom_right": "assets/blocks/ice/ice_abr.png",
+            "default": "assets/images/platform/blocks/ice/ice.png",
+            "vertical": "assets/images/platform/blocks/ice/ice_vertical.png",
+            "horizontal": "assets/images/platform/blocks/ice/ice_horizontal.png",
+            "top": "assets/images/platform/blocks/ice/ice_top.png",
+            "bottom": "assets/images/platform/blocks/ice/ice_bottom.png",
+            "left": "assets/images/platform/blocks/ice/ice_left.png",
+            "right": "assets/images/platform/blocks/ice/ice_right.png",
+            "isolated": "assets/images/platform/blocks/ice/ice_isolated.png",
+            "black": "assets/images/platform/blocks/ice/ice_black.png",
+            "top_bottom_left": "assets/images/platform/blocks/ice/ice_tbl.png",
+            "top_bottom_right": "assets/images/platform/blocks/ice/ice_tbr.png",
+            "top_left_right": "assets/images/platform/blocks/ice/ice_tlr.png",
+            "bottom_left_right": "assets/images/platform/blocks/ice/ice_blr.png",
+            "angle_top_left": "assets/images/platform/blocks/ice/ice_atl.png",
+            "angle_top_right": "assets/images/platform/blocks/ice/ice_atr.png",
+            "angle_bottom_left": "assets/images/platform/blocks/ice/ice_abl.png",
+            "angle_bottom_right": "assets/images/platform/blocks/ice/ice_abr.png",
         },
         "ladder": {
-            "default": "assets/blocks/frame.png",
-            "vertical": "assets/blocks/frame_vertical.png",
-            "horizontal": "assets/blocks/frame_horizontal.png",
-            "isolated": "assets/blocks/frame_isolated.png",
+            "vertical": "assets/images/platform/blocks/ladder_vertical.png",
+            "horizontal": "assets/images/platform/blocks/ladder_horizontal.png",
+            "isolated": "assets/images/platform/blocks/ladder_isolated.png",
         },
         "stone_brick": {
-            "default": "assets/blocks/stone_brick.png",
-            "vertical": "assets/blocks/stone_brick_vertical.png",
-            "horizontal": "assets/blocks/stone_brick_horizontal.png",
-            "isolated": "assets/blocks/stone_brick_isolated.png",
+            "default": "assets/images/platform/blocks/stone_brick.png",
+            "vertical": "assets/images/platform/blocks/stone_brick_vertical.png",
+            "horizontal": "assets/images/platform/blocks/stone_brick_horizontal.png",
+            "isolated": "assets/images/platform/blocks/stone_brick_isolated.png",
+            "black": "assets/images/platform/blocks/stone_brick_black.png",
+            "top": "assets/images/platform/blocks/stone_brick_top.png",
+            "bottom": "assets/images/platform/blocks/stone_brick_bottom.png",
+            "left": "assets/images/platform/blocks/stone_brick_left.png",
+            "right": "assets/images/platform/blocks/stone_brick_right.png",
+            "angle_top_left": "assets/images/platform/blocks/stone_brick_atl.png",
+            "angle_top_right": "assets/images/platform/blocks/stone_brick_atr.png",
+            "angle_bottom_left": "assets/images/platform/blocks/stone_brick_abl.png",
+            "angle_bottom_right": "assets/images/platform/blocks/stone_brick_abr.png",
+            "top_bottom_left": "assets/images/platform/blocks/stone_brick_atbl.png",
+            "top_bottom_right": "assets/images/platform/blocks/stone_brick_tbr.png",
+            "top_left_right": "assets/images/platform/blocks/stone_brick_atlr.png",
+            "bottom_left_right": "assets/images/platform/blocks/stone_brick_ablr.png",
+
         },
         # Платформы
         "wood_platform": {
-            "default": "assets/platforms/wood_platform.png",
-            "supported_left": "assets/platforms/wood_platform_supported_left.png",
-            "supported_right": "assets/platforms/wood_platform_supported_right.png",
+            "default": "assets/platforms/platforms/wood_platform/wood_platform.png",
+            "supported_left": "assets/platforms/platforms/wood_platform/wood_platform_supported_left.png",
+            "supported_right": "assets/platforms/platforms/wood_platform/wood_platform_supported_right.png",
         },
         "stone_platform": {
-            "default": "assets/platforms/stone_platform.png",
-            "connected_left": "assets/platforms/stone_platform_connected_left.png",
-            "connected_right": "assets/platforms/stone_platform_connected_right.png",
-            "connected_both": "assets/platforms/stone_platform_connected_both.png",
+            "default": "assets/platforms/platforms/stone_platform/default.png",
+            "connected_left": "assets/platforms/platforms/stone_platform/default.png",
+            "connected_right": "assets/platforms/platforms/stone_platform/default.png",
+            "connected_both": "assets/platforms/platforms/stone_platform/default.png",
         },
         # Шипы
         "spike": {
-            "default": "assets/traps/spike.png",
-            "top": "assets/traps/spike_top.png",
-            "bottom": "assets/traps/spike_bottom.png",
-            "left": "assets/traps/spike_left.png",
-            "right": "assets/traps/spike_right.png",
+            "top": "assets/images/hazards/spikes/spike_top.png",
+            "bottom": "assets/images/hazards/spikes/spike_bottom.png",
+            "left": "assets/images/hazards/spikes/spike_left.png",
+            "right": "assets/images/hazards/spikes/spike_right.png",
         },
     }
+
+    GRASS_ANIMATION_PATHS = [
+        "assets/images/platforms/animations/grass/grass_1.png",
+        "assets/images/platforms/animations/grass/grass_2.png",
+        "assets/images/platforms/animations/grass/grass_3.png",
+    ]
+
+    GRASS_ANIMATION_CHANCE = 0.2
 
     @classmethod
     def parse_level(cls, level_file):
@@ -96,6 +120,7 @@ class LevelParser:
 
         all_sprites = pygame.sprite.Group()
         blocks = pygame.sprite.Group()
+        animations = pygame.sprite.Group()
         platforms = pygame.sprite.Group()
         traps = pygame.sprite.Group()
 
@@ -114,6 +139,15 @@ class LevelParser:
                         block_grid[row_index][col_index] = block
                         blocks.add(block)
                         all_sprites.add(block)
+                        if item_type in {"dirt", "stone_brick"}:
+                            if random.random() < cls.GRASS_ANIMATION_CHANCE:
+                                grass_animation = Block(
+                                    x, y - 4,
+                                    cls.GRASS_ANIMATION_PATHS, 
+                                    frame_duration=200,
+                                    )
+                                animations.add(grass_animation)
+                                all_sprites.add(grass_animation)
 
                     elif item_type == "wood_platform":
                         platform = Platform(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
