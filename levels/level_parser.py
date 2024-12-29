@@ -134,7 +134,7 @@ class LevelParser:
                     y = row_index * cls.TILE_SIZE
 
                     item_type = cls.SYMBOLS[symbol]
-                    if item_type in {"dirt", "ice", "frame", "stone_brick"}:
+                    if item_type in {"dirt", "ice", "ladder", "stone_brick"}:
                         block = Block(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
                         block_grid[row_index][col_index] = block
                         blocks.add(block)
