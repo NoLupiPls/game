@@ -1,7 +1,9 @@
+import random
+
 import pygame
-from core.block import Block
-from core.platform import Platform
-from traps import Spike
+from core.structure_platforms import Block
+from core.structure_platforms import Platform
+from entities.hazards import Spike
 
 class LevelParser:
     TILE_SIZE = 16  # Размер каждого блока в пикселях
@@ -143,7 +145,8 @@ class LevelParser:
                             if random.random() < cls.GRASS_ANIMATION_CHANCE:
                                 grass_animation = Block(
                                     x, y - 4,
-                                    cls.GRASS_ANIMATION_PATHS, 
+                                    cls.GRASS_ANIMATION_PATHS,
+                                    cls.TILE_SIZE,
                                     frame_duration=200,
                                     )
                                 animations.add(grass_animation)

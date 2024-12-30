@@ -1,9 +1,10 @@
 import pygame
 from core.settings import PLAYER_SIZE, PLAYER_COLOR, PLAYER_SPEED, GRAVITY, MAX_FALL_SPEED, JUMP_POWER, WIDTH, HEIGHT
+from entities.hazards import Spike, Lava
 
 
 class Player:
-    def __init__(self, x, y):
+    def __init__(self, x, y, difficulty):
         """
         Инициализация игрока.
         """
@@ -13,19 +14,47 @@ class Player:
         self.velocity_x = 0        # Горизонтальная скорость
         self.velocity_y = 0        # Вертикальная скорость
         self.on_ground = False     # Флаг, находится ли игрок на земле
+        self.damage_inflictable = True # Флаг, может ли игрок получать урон
+        self.hp = 0                # Здоровье игрока
+        self.can_dash = True
+        self.is_dashing = False
+        self.last_dash_tick = 0
+        self.dashes = 0            # Счёт использованных рывков
+        if difficulty == 'hard':
+            self.hp = 1
+        elif difficulty == 'medium':
+            self.hp = 2
+        elif difficulty == 'easy':
+            self.hp = 3
+        else:
+            raise ValueError('Передана неверная сложность в выборе')
 
     def handle_input(self, keys):
         """
         Обработка ввода от клавиатуры.
         """
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_a]:
             self.velocity_x = -self.speed
-        elif keys[pygame.K_RIGHT]:
+        elif keys[pygame.K_d]:
             self.velocity_x = self.speed
+        elif keys[pygame.K_LSHIFT]:
+            if pygame.time.get_ticks() > self.last_dash_tick + 5000:
+                self.can_dash = True
+                if self.can_dash:
+                    self.dash_tick = pygame.time.get_ticks() + 1500
+                    self.can_dash = False
+                    self.velocity_x *= 3
+                    self.velocity_y *= 3
+                else:
+                    current_tick = pygame.time.get_ticks()
+                    if current_tick >= self.dash_tick:
+                        self.velocity_x /= 3
+                        self.velocity_y /= 3
+                    self.last_dash_tick = current_tick
         else:
             self.velocity_x = 0
 
-        if keys[pygame.K_SPACE] and self.on_ground:
+        if (keys[pygame.K_SPACE] or keys[pygame.K_w]) and self.on_ground:
             self.velocity_y = JUMP_POWER  # Прыжок
 
     def apply_gravity(self):
@@ -41,6 +70,7 @@ class Player:
         """
         Обновление положения игрока и проверка столкновений.
         """
+
         # Обновляем горизонтальное положение
         self.rect.x += self.velocity_x
         self.check_horizontal_collisions(tiles)
@@ -66,6 +96,33 @@ class Player:
                     self.rect.right = tile.left
                 elif self.velocity_x < 0:  # Движение влево
                     self.rect.left = tile.right
+
+    def traps_collisions(self, traps):
+        """
+        Проверка столкновений с шипами и лавой.
+        """
+        for trap in traps:
+            if self.rect.colliderect(trap):
+                if type(trap) is Spike:
+                    self.hp -= 1
+                    if self.damage_inflictable:
+                        current_tick_invul = pygame.time.get_ticks()
+                        self.damage_inflictable = False
+                    else:
+                        current_tick = pygame.time.get_ticks()
+                        if current_tick >= current_tick_invul + 3000:
+                            self.damage_inflictable = True
+                elif type(trap) is Lava:
+                    self.hp -= 1
+                    self.speed -= 2
+                    if self.damage_inflictable:
+                        current_tick_invul = pygame.time.get_ticks()
+                        self.damage_inflictable = False
+                    else:
+                        current_tick = pygame.time.get_ticks()
+                        if current_tick >= current_tick_invul + 3000:
+                            self.damage_inflictable = True
+                            self.speed += 2
 
     def check_vertical_collisions(self, tiles):
         """
