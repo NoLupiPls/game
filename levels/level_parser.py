@@ -1,12 +1,12 @@
 import random
-
+import os
 import pygame
 from core.structure_platforms import Block
 from core.structure_platforms import Platform
 from entities.hazards import Spike
 
 class LevelParser:
-    TILE_SIZE = 16  # Размер каждого блока в пикселях
+    TILE_SIZE = 32  # Размер каждого блока в пикселях
     SCREEN_WIDTH = 40  # Количество блоков по ширине
     SCREEN_HEIGHT = 22  # Количество блоков по высоте
 
@@ -23,7 +23,7 @@ class LevelParser:
     TEXTURE_PATHS = {
         # Блоки
         "dirt": {
-            "default": "assets/images/platform/blocks/dirt/dirt.png",
+            "default": os.path.join('assets', 'images', 'platform', 'blocks', 'dirt', 'dirt_black.png'),
             "vertical": "assets/images/platform/blocks/dirt/dirt_vertical.png",
             "horizontal": "assets/images/platform/blocks/dirt/dirt_blr.png",
             "top": "assets/images/platform/blocks/dirt/dirt_top.png",
@@ -87,15 +87,15 @@ class LevelParser:
         },
         # Платформы
         "wood_platform": {
-            "default": "assets/platforms/platforms/wood_platform/wood_platform.png",
-            "supported_left": "assets/platforms/platforms/wood_platform/wood_platform_supported_left.png",
-            "supported_right": "assets/platforms/platforms/wood_platform/wood_platform_supported_right.png",
+            "default": "assets/platform/platform/wood_platform/wood_platform.png",
+            "supported_left": "assets/platform/platform/wood_platform/wood_platform_supported_left.png",
+            "supported_right": "assets/platform/platform/wood_platform/wood_platform_supported_right.png",
         },
         "stone_platform": {
-            "default": "assets/platforms/platforms/stone_platform/default.png",
-            "connected_left": "assets/platforms/platforms/stone_platform/default.png",
-            "connected_right": "assets/platforms/platforms/stone_platform/default.png",
-            "connected_both": "assets/platforms/platforms/stone_platform/default.png",
+            "default": "assets/platform/platform/stone_platform/default.png",
+            "connected_left": "assets/platform/platform/stone_platform/default.png",
+            "connected_right": "assets/platform/platform/stone_platform/default.png",
+            "connected_both": "assets/platform/platform/stone_platform/default.png",
         },
         # Шипы
         "spike": {
@@ -107,9 +107,9 @@ class LevelParser:
     }
 
     GRASS_ANIMATION_PATHS = [
-        "assets/images/platforms/animations/grass/grass_1.png",
-        "assets/images/platforms/animations/grass/grass_2.png",
-        "assets/images/platforms/animations/grass/grass_3.png",
+        os.path.join('assets', 'images', 'platform', 'animations', 'grass', 'grass_1.png'),
+        "assets/images/platform/animations/grass/grass_2.png",
+        "assets/images/platform/animations/grass/grass_3.png",
     ]
 
     GRASS_ANIMATION_CHANCE = 0.2
@@ -145,8 +145,8 @@ class LevelParser:
                             if random.random() < cls.GRASS_ANIMATION_CHANCE:
                                 grass_animation = Block(
                                     x, y - 4,
-                                    cls.GRASS_ANIMATION_PATHS,
                                     cls.TILE_SIZE,
+                                    cls.GRASS_ANIMATION_PATHS[random.randrange(0, 3)],
                                     frame_duration=200,
                                     )
                                 animations.add(grass_animation)
@@ -185,7 +185,7 @@ class LevelParser:
         return {
             "all_sprites": all_sprites,
             "blocks": blocks,
-            "platforms": platforms,
+            "platform": platforms,
             "traps": traps,
         }
 

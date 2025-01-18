@@ -3,6 +3,8 @@ import os
 from core.settings import *
 
 
+difficulty = 'easy'
+
 class Button:
     def __init__(self, image, pos, text_input, font, base_color, hovering_color):
         self.image = image
@@ -41,13 +43,13 @@ pygame.init()
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Menu")
 
-BG = pygame.image.load(os.path.join('../', 'assets', 'images', 'ui', 'menu', 'menu_background_19201080.png'))
+BG = pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu', 'menu_background_19201080.png'))
 
-os.path.join('../', 'assets', 'fonts', 'mainmenufont.otf')
+os.path.join('assets', 'fonts', 'mainmenufont.otf')
 
 
 def get_font(size):  # Returns Press-Start-2P in the desired size
-    return pygame.font.Font(os.path.join('../', 'assets', 'fonts', 'mainmenufont.otf'), size)
+    return pygame.font.Font(os.path.join('assets', 'fonts', 'mainmenufont.otf'), size)
 
 
 def rescale_bg():
@@ -64,18 +66,18 @@ def new_game_choose_difficulty():
         NGCD_RECT = NGCD_TEXT.get_rect(center=(WIDTH // 2, HEIGHT // 3))
         SCREEN.blit(NGCD_TEXT, NGCD_RECT)
 
-        NGCD_DIFF_MODE_EASY = Button(image=pygame.image.load(os.path.join('../', 'assets', 'images', 'ui', 'menu',
+        NGCD_DIFF_MODE_EASY = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
                                                                 'play_button.png')), pos=(WIDTH // 2, HEIGHT // 2),
                            text_input="EASY", font=get_font(75), base_color="White", hovering_color="Green")
         buttons.append(NGCD_DIFF_MODE_EASY)
 
-        NGCD_DIFF_MODE_MEDIUM = Button(image=pygame.image.load(os.path.join('../', 'assets', 'images', 'ui', 'menu',
+        NGCD_DIFF_MODE_MEDIUM = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
                                                                           'play_button.png')),
                                      pos=(WIDTH // 2, HEIGHT // 1.575),
                                      text_input="MEDUIM", font=get_font(75), base_color="White", hovering_color="Green")
         buttons.append(NGCD_DIFF_MODE_MEDIUM)
 
-        NGCD_DIFF_MODE_HARD = Button(image=pygame.image.load(os.path.join('../', 'assets', 'images', 'ui', 'menu',
+        NGCD_DIFF_MODE_HARD = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
                                                                           'play_button.png')),
                                      pos=(WIDTH // 2, HEIGHT // 1.3),
                                      text_input="HARD", font=get_font(75), base_color="White", hovering_color="Green")
@@ -84,21 +86,18 @@ def new_game_choose_difficulty():
         for button in buttons:
             button.changeColor(NGCD_MOUSE_POS)
             button.update(SCREEN)
-        f = open(os.path.join('../', 'core', 'save_files', 'temp_by_default', 'difficulty.txt'), "w", encoding="utf-8")
+        difficulty = 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if NGCD_DIFF_MODE_EASY.checkForInput(NGCD_MOUSE_POS):
-                    f.write('1')
-                    ... # call game init and terminate menu
+                    difficulty = 'easy' # call game init and terminate menu
                 if NGCD_DIFF_MODE_MEDIUM.checkForInput(NGCD_MOUSE_POS):
-                    f.write('2')
-                    ... # call game init and terminate menu
+                    difficulty = 'meduim' # call game init and terminate menu
                 if NGCD_DIFF_MODE_HARD.checkForInput(NGCD_MOUSE_POS):
-                    f.write('3')
-                    ... # call game init and terminate menu
+                    difficulty = 'hard' # call game init and terminate menu
         pygame.display.update()
 
 def play():
@@ -108,15 +107,15 @@ def play():
 
         SCREEN.blit(BG, (0, 0))
 
-        LOAD_GAME = Button(image=pygame.image.load(os.path.join('../', 'assets', 'images', 'ui', 'menu',
+        LOAD_GAME = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
                                                                 'play_button.png')), pos=(WIDTH // 2, HEIGHT // 2),
                            text_input="Load game", font=get_font(75), base_color="White", hovering_color="Green")
         buttons.append(LOAD_GAME)
-        NEW_GAME = Button(image=pygame.image.load(os.path.join('../', 'assets', 'images', 'ui', 'menu',
+        NEW_GAME = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
                                                                 'play_button.png')), pos=(WIDTH // 2, HEIGHT // 3),
                            text_input="New game", font=get_font(75), base_color="White", hovering_color="Green")
         buttons.append(NEW_GAME)
-        PLAY_BACK = Button(image=pygame.image.load(os.path.join('../', 'assets', 'images', 'ui', 'menu',
+        PLAY_BACK = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
                                                                 'play_button.png')), pos=(WIDTH // 2, HEIGHT // 1.5),
                            text_input="BACK", font=get_font(75), base_color="White", hovering_color="Green")
         buttons.append(PLAY_BACK)
@@ -154,7 +153,6 @@ def options():
                               text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
 
 
-
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_BACK.update(SCREEN)
 
@@ -180,15 +178,15 @@ def main_menu():
         MENU_TEXT = get_font(100).render("Game name", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
 
-        PLAY_BUTTON = Button(image=pygame.image.load(os.path.join('../', 'assets', 'images', 'ui', 'menu',
+        PLAY_BUTTON = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
                                                                   'play_button.png')),
                              pos=(WIDTH // 4, HEIGHT // 3),
                              text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        OPTIONS_BUTTON = Button(image=pygame.image.load(os.path.join('../', 'assets', 'images', 'ui', 'menu',
+        OPTIONS_BUTTON = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
                                                                      'menu_options_button.png')),
                                 pos=(WIDTH // 4, HEIGHT // 2),
                                 text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        QUIT_BUTTON = Button(image=pygame.image.load(os.path.join('../', 'assets', 'images', 'ui', 'menu',
+        QUIT_BUTTON = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
                                                                   'menu_quit_button.png')),
                              pos=(WIDTH // 4, HEIGHT // 1.5),
                              text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
@@ -213,6 +211,3 @@ def main_menu():
                     sys.exit()
 
         pygame.display.update()
-
-
-main_menu()
