@@ -1,5 +1,6 @@
 import pygame
 
+
 class Spike(pygame.sprite.Sprite):
     def __init__(self, x, y, size, texture):
         super().__init__()

@@ -7,7 +7,7 @@ def main():
     # Инициализация Pygame
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))  # Создаем окно
-    pygame.display.set_caption("Celeste-like Game")  # Устанавливаем заголовок окна
+    pygame.display.set_caption("Game")  # Устанавливаем заголовок окна
     clock = pygame.time.Clock()  # Таймер для контроля FPS
 
     # Создаем объект игры
