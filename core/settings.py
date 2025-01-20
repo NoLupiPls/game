@@ -3,7 +3,7 @@ WIDTH = 1280         # Ширина окна
 HEIGHT = 720        # Высота окна
 FPS = 60            # Кадры в секунду
 TITLE = "Game"      # Заголовок окна
-
+DIFFICULTY = 'easy'
 # Цвета (RGB)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)

@@ -1,9 +1,27 @@
-import pygame
-from core.settings import WIDTH, HEIGHT, FPS
-from core.game import Game
+from entities.player import Player
+from entities.hazards import *
+from entities.platform import *
+from levels.level_parser import LevelParser
+from core.settings import WIDTH, HEIGHT, FPS, DIFFICULTY
+import os
+import time
+from ui.menu import main_menu_gui
+import core.settings
 
 
 def main():
+    j = main_menu_gui()
+    while core.settings.DIFFICULTY is None:
+        j = main_menu_gui()
+        import core.settings
+        time.sleep(16)
+    DIFFICULTY = core.settings.DIFFICULTY
+    player = Player(0, 0, DIFFICULTY)
+    levelparse = LevelParser.parse_level(os.path.join('tests', 'level.txt'))
+    all_sprites = levelparse['all_sprites']
+    blocks = levelparse['blocks']
+    platforms = levelparse['platform']
+    traps = levelparse['traps']
     # Инициализация Pygame
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))  # Создаем окно
@@ -11,7 +29,6 @@ def main():
     clock = pygame.time.Clock()  # Таймер для контроля FPS
 
     # Создаем объект игры
-    game = Game(screen)
 
     # Главный цикл игры
     running = True
@@ -20,23 +37,17 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            game.handle_event(event)  # Передаем событие в игру
-
-        # Обновляем состояние игры
-        game.update()
-
-        # Рисуем объекты
-        game.render()
-
-        # Обновляем экран
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    ...  # call pause menu
         pygame.display.flip()
-
-        # Ограничиваем FPS
         clock.tick(FPS)
-
-    # Завершаем Pygame
+        all_sprites.update()
+        blocks.update()
+        platforms.update()
+        traps.update()
+        player.update(platforms)
+        pygame.display.update()
     pygame.quit()
 
-
-if __name__ == "__main__":
-    main()
+main()

@@ -5,14 +5,13 @@ from ui.menu import difficulty
 from levels.level_parser import LevelParser
 from core.settings import *
 import os
+import ui.menu
 
 
-player = Player(0, 0, difficulty)
-levelparse = LevelParser.parse_level(os.path.join('tests', 'level.txt'))
-all_sprites = levelparse['all_sprites']
-blocks = levelparse['blocks']
-platforms = levelparse['platform']
-traps = levelparse['traps']
+pygame.init()
+SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Game")
+j = ui.menu.main_menu()
 
 running = True
 while running:
@@ -22,7 +21,3 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 ... # call pause menu
-    all_sprites.update()
-    blocks.update()
-    platforms.update()
-    traps.update()
