@@ -28,8 +28,8 @@ class LevelParser:
             "horizontal": "assets/images/platform/blocks/dirt/dirt_blr.png",
             "top": "assets/images/platform/blocks/dirt/dirt_top.png",
             "bottom": "assets/images/platform/blocks/dirt/dirt_bottom.png",
-            "left": "assets/images/platform/blocks/dirt/dirt_left.png",
-            "right": "assets/images/platform/blocks/dirt/dirt_right.png",
+            "left": "assets/images/platform/blocks/dirt/dirt_tbr.png",
+            "right": "assets/images/platform/blocks/dirt/dirt_tbl.png",
             "isolated": "assets/images/platform/blocks/dirt/dirt_isolated.png",
             "black": "assets/images/platform/blocks/dirt/dirt_black.png",
             "top_bottom_left": "assets/images/platform/blocks/dirt/dirt_tbr.png",
@@ -87,18 +87,19 @@ class LevelParser:
         },
         # Платформы
         "wood_platform": {
-            "default": "assets/platform/platform/wood_platform/wood_platform.png",
-            "supported_left": "assets/platform/platform/wood_platform/wood_platform_supported_left.png",
-            "supported_right": "assets/platform/platform/wood_platform/wood_platform_supported_right.png",
+            "default": "assets/images/platform/platforms/wood_platform/wood_platform.png",
+            "supported_left": "assets/images/platform/platforms/wood_platform/wood_platform_supported_left.png",
+            "supported_right": "assets/images/platform/platforms/wood_platform/wood_platform_supported_right.png",
         },
         "stone_platform": {
-            "default": "assets/platform/platform/stone_platform/default.png",
-            "connected_left": "assets/platform/platform/stone_platform/default.png",
-            "connected_right": "assets/platform/platform/stone_platform/default.png",
-            "connected_both": "assets/platform/platform/stone_platform/default.png",
+            "default": "assets/images/platform/platforms/stone_platform/default.png",
+            "connected_left": "assets/images/platform/platforms/stone_platform/default.png",
+            "connected_right": "assets/images/platform/platforms/stone_platform/default.png",
+            "connected_both": "assets/images/platform/platforms/stone_platform/default.png",
         },
         # Шипы
         "spike": {
+            "default": "assets/images/hazards/spikes/spike_top.png",
             "top": "assets/images/hazards/spikes/spike_top.png",
             "bottom": "assets/images/hazards/spikes/spike_bottom.png",
             "left": "assets/images/hazards/spikes/spike_left.png",
@@ -130,46 +131,49 @@ class LevelParser:
 
         # Первоначальная загрузка блоков и объектов
         for row_index, line in enumerate(lines):
+            print(row_index)
             for col_index, symbol in enumerate(line):
-                if symbol in cls.SYMBOLS:
-                    x = col_index * cls.TILE_SIZE
-                    y = row_index * cls.TILE_SIZE
+                try:
+                    if symbol in cls.SYMBOLS:
+                        x = col_index * cls.TILE_SIZE
+                        y = row_index * cls.TILE_SIZE
 
-                    item_type = cls.SYMBOLS[symbol]
-                    if item_type in {"dirt", "ice", "ladder", "stone_brick"}:
-                        block = Block(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
-                        block_grid[row_index][col_index] = block
-                        blocks.add(block)
-                        all_sprites.add(block)
-                        if item_type in {"dirt", "stone_brick"}:
-                            if random.random() < cls.GRASS_ANIMATION_CHANCE:
-                                grass_animation = Block(
-                                    x, y - 4,
-                                    cls.TILE_SIZE,
-                                    cls.GRASS_ANIMATION_PATHS[random.randrange(0, 3)],
-                                    frame_duration=200,
-                                    )
-                                animations.add(grass_animation)
-                                all_sprites.add(grass_animation)
+                        item_type = cls.SYMBOLS[symbol]
+                        if item_type in {"dirt", "ice", "ladder", "stone_brick"}:
+                            block = Block(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
+                            block_grid[row_index][col_index] = block
+                            blocks.add(block)
+                            all_sprites.add(block)
+                            if item_type in {"dirt", "stone_brick"}:
+                                if random.random() < cls.GRASS_ANIMATION_CHANCE:
+                                    grass_animation = Block(
+                                        x, y - 4,
+                                        cls.TILE_SIZE,
+                                        cls.GRASS_ANIMATION_PATHS[random.randrange(0, 3)],
+                                        frame_duration=200,
+                                        )
+                                    animations.add(grass_animation)
+                                    all_sprites.add(grass_animation)
 
-                    elif item_type == "wood_platform":
-                        platform = Platform(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
-                        block_grid[row_index][col_index] = platform
-                        platforms.add(platform)
-                        all_sprites.add(platform)
+                        elif item_type == "wood_platform":
+                            platform = Platform(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
+                            block_grid[row_index][col_index] = platform
+                            platforms.add(platform)
+                            all_sprites.add(platform)
 
-                    elif item_type == "stone_platform":
-                        platform = Platform(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
-                        block_grid[row_index][col_index] = platform
-                        platforms.add(platform)
-                        all_sprites.add(platform)
+                        elif item_type == "stone_platform":
+                            platform = Platform(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
+                            block_grid[row_index][col_index] = platform
+                            platforms.add(platform)
+                            all_sprites.add(platform)
 
-                    elif item_type == "spike":
-                        spike = Spike(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
-                        block_grid[row_index][col_index] = spike
-                        traps.add(spike)
-                        all_sprites.add(spike)
-
+                        elif item_type == "spike":
+                            spike = Spike(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
+                            block_grid[row_index][col_index] = spike
+                            traps.add(spike)
+                            all_sprites.add(spike)
+                except IndexError:
+                    pass
         # Обновление текстур блоков, платформ и шипов
         for row_index, row in enumerate(block_grid):
             for col_index, block in enumerate(row):
