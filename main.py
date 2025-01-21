@@ -18,7 +18,7 @@ def main():
     traps = levelparse['traps']
     # Создаем объект игры
     game = Game(screen)
-    collideables = [blocks, platforms, traps]
+    collideables = [blocks]
     # Главный цикл игры
     running = True
     while running:
@@ -27,9 +27,12 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             game.handle_event(event, collideables)  # Передаем событие в игру
+            game.player.render(screen)
+            game.aaaaaaaa(collideables)
         # Обновляем состояние игры
         # Обновляем экран
         all_sprites.draw(screen)
+        game.player.render(screen)
         pygame.display.flip()
         # Ограничиваем FPS
         clock.tick(FPS)

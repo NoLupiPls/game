@@ -41,20 +41,13 @@ class Player:
             self.velocity_x = 0
         if keys[pygame.K_LSHIFT] and (keys[pygame.K_d] or keys[pygame.K_a]):
             if pygame.time.get_ticks() > self.last_dash_tick + 5000:
+                print(pygame.time.get_ticks())
                 self.can_dash = True
                 if self.can_dash:
                     self.dash_tick = pygame.time.get_ticks() + 1500
                     self.can_dash = False
-                    self.velocity_x *= 3
-                    self.velocity_y *= 3
-                else:
-                    current_tick = pygame.time.get_ticks()
-                    if current_tick >= self.dash_tick:
-                        self.velocity_x /= 3
-                        self.velocity_y /= 3
-                    self.last_dash_tick = current_tick
-            self.velocity_x *= 3
-            self.velocity_y *= 3
+                    self.rect.x += 20
+                    self.rect.y -= 20
         if (keys[pygame.K_SPACE] or keys[pygame.K_w]) and self.on_ground:
             self.velocity_y = JUMP_POWER  # Прыжок
 
@@ -82,10 +75,14 @@ class Player:
         self.check_vertical_collisions(tiles)
 
         # Ограничиваем игрока в пределах экрана
-        if self.rect.x < 0:
-            self.rect.x = 0
+        if self.rect.y < 0:
+            self.rect.y = 0
+        if self.rect.y > HEIGHT:
+            self.rect.y = HEIGHT // 2
         if self.rect.x + self.rect.width > WIDTH:
-            self.rect.x = WIDTH - self.rect.width
+            self.rect.x = WIDTH // 2
+        if self.rect.x < 0:
+            self.rect.x = WIDTH // 2
 
     def check_horizontal_collisions(self, tiles):
         """
@@ -94,9 +91,9 @@ class Player:
         for tile in tiles:
             if self.rect.colliderect(tile):
                 if self.velocity_x > 0:  # Движение вправо
-                    self.rect.right = tile.left
+                    self.rect.right = tile.rect.left
                 elif self.velocity_x < 0:  # Движение влево
-                    self.rect.left = tile.right
+                    self.rect.left = tile.rect.right
 
     def traps_collisions(self, traps):
         """
@@ -129,15 +126,15 @@ class Player:
         """
         Проверка вертикальных столкновений с тайлами.
         """
-        asdjdsaj = '''for tile in tiles:
+        for tile in tiles:
             if self.rect.colliderect(tile):
                 if self.velocity_y > 0:  # Падение
-                    self.rect.bottom = tile.top
+                    self.rect.bottom = tile.rect.top
                     self.velocity_y = 0
                     self.on_ground = True
                 elif self.velocity_y < 0:  # Прыжок
-                    self.rect.top = tile.bottom
-                    self.velocity_y = 0'''
+                    self.rect.top = tile.rect.bottom
+                    self.velocity_y = 0
 
         # Если не касается плиток, сбрасываем флаг on_ground
         if not any(self.rect.colliderect(tile) for tile in tiles):
