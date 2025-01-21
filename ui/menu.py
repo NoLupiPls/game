@@ -1,10 +1,8 @@
 import pygame, sys
 import os
-from core.settings import *
+from core.settings import DIFFICULTY, WIDTH, HEIGHT
 
-
-difficulty = 'easy'
-
+sys.path.append('../main.py')
 class Button:
     def __init__(self, image, pos, text_input, font, base_color, hovering_color):
         self.image = image
@@ -55,8 +53,8 @@ def get_font(size):  # Returns Press-Start-2P in the desired size
 def rescale_bg():
     global BG
     BG = pygame.transform.scale(BG, (WIDTH, HEIGHT))
-
 def new_game_choose_difficulty():
+    global DIFFICULTY
     buttons = []
     while True:
         NGCD_MOUSE_POS = pygame.mouse.get_pos()
@@ -86,18 +84,20 @@ def new_game_choose_difficulty():
         for button in buttons:
             button.changeColor(NGCD_MOUSE_POS)
             button.update(SCREEN)
-        difficulty = 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if NGCD_DIFF_MODE_EASY.checkForInput(NGCD_MOUSE_POS):
-                    difficulty = 'easy' # call game init and terminate menu
+                    DIFFICULTY = 'easy' # call game init and terminate menu
+                    exit()
                 if NGCD_DIFF_MODE_MEDIUM.checkForInput(NGCD_MOUSE_POS):
-                    difficulty = 'meduim' # call game init and terminate menu
+                    DIFFICULTY = 'meduim' # call game init and terminate menu
+                    exit()
                 if NGCD_DIFF_MODE_HARD.checkForInput(NGCD_MOUSE_POS):
-                    difficulty = 'hard' # call game init and terminate menu
+                    DIFFICULTY = 'hard' # call game init and terminate menu
+                    exit()
         pygame.display.update()
 
 def play():
@@ -130,7 +130,7 @@ def play():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
-                    main_menu()
+                    main_menu_gui()
                 if LOAD_GAME.checkForInput(PLAY_MOUSE_POS):
                     ...
                 if NEW_GAME.checkForInput(PLAY_MOUSE_POS):
@@ -162,12 +162,12 @@ def options():
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
-                    main_menu()
+                    main_menu_gui()
 
         pygame.display.update()
 
 
-def main_menu():
+def main_menu_gui():
     rescale_bg()
     running = True
     while running:

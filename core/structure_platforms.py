@@ -21,9 +21,9 @@ class Platform(pygame.sprite.Sprite):
         super().__init__()
         self.size = size
         self.image = pygame.image.load(texture)
-        self.image = pygame.transform.scale(self.image, (size, size))
+        self.image = pygame.transform.scale(self.image, (self.size, self.size))
         self.mask = pygame.mask.from_surface(self.image)
-        self.rect = pygame.Rect(x, y, x + size, y + size)
+        self.rect = pygame.Rect(x, y, x + self.size, y + self.size)
 
     def update_texture(self, new_texture):
         self.image = pygame.image.load(new_texture)

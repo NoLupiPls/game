@@ -1,5 +1,6 @@
 import pygame
 
+
 class Spike(pygame.sprite.Sprite):
     def __init__(self, x, y, size, texture):
         super().__init__()
@@ -17,6 +18,7 @@ class Spike(pygame.sprite.Sprite):
 class Lava(pygame.sprite.Sprite):
     def __init__(self, x, y, size, texture):
         super().__init__()
+        self.size = size
         self.image = pygame.image.load(texture)
         self.size = size
         self.image = pygame.transform.scale(self.image, (size, size))

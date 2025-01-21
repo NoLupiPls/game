@@ -28,8 +28,10 @@ class LevelParser:
             "horizontal": "assets/images/platform/blocks/dirt/dirt_blr.png",
             "top": "assets/images/platform/blocks/dirt/dirt_top.png",
             "bottom": "assets/images/platform/blocks/dirt/dirt_bottom.png",
-            "left": "assets/images/platform/blocks/dirt/dirt_tbr.png",
-            "right": "assets/images/platform/blocks/dirt/dirt_tbl.png",
+
+            "left": "assets/images/platform/blocks/dirt/dirt_black.png", # временная заглушка
+            "right": "assets/images/platform/blocks/dirt/dirt_black.png", # временная заглушка
+
             "isolated": "assets/images/platform/blocks/dirt/dirt_isolated.png",
             "black": "assets/images/platform/blocks/dirt/dirt_black.png",
             "top_bottom_left": "assets/images/platform/blocks/dirt/dirt_tbr.png",
