@@ -20,6 +20,7 @@ class Lava(pygame.sprite.Sprite):
         super().__init__()
         self.size = size
         self.image = pygame.image.load(texture)
+        self.size = size
         self.image = pygame.transform.scale(self.image, (size, size))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = pygame.Rect(x, y, x + size, y + size)

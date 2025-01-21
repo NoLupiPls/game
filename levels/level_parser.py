@@ -28,8 +28,10 @@ class LevelParser:
             "horizontal": "assets/images/platform/blocks/dirt/dirt_blr.png",
             "top": "assets/images/platform/blocks/dirt/dirt_top.png",
             "bottom": "assets/images/platform/blocks/dirt/dirt_bottom.png",
+
             "left": "assets/images/platform/blocks/dirt/dirt_black.png", # временная заглушка
             "right": "assets/images/platform/blocks/dirt/dirt_black.png", # временная заглушка
+
             "isolated": "assets/images/platform/blocks/dirt/dirt_isolated.png",
             "black": "assets/images/platform/blocks/dirt/dirt_black.png",
             "top_bottom_left": "assets/images/platform/blocks/dirt/dirt_tbr.png",
@@ -99,7 +101,7 @@ class LevelParser:
         },
         # Шипы
         "spike": {
-            "default": 'assets/images/hazards/spikes/spike_top.png',
+            "default": "assets/images/hazards/spikes/spike_top.png",
             "top": "assets/images/hazards/spikes/spike_top.png",
             "bottom": "assets/images/hazards/spikes/spike_bottom.png",
             "left": "assets/images/hazards/spikes/spike_left.png",
@@ -131,6 +133,7 @@ class LevelParser:
 
         # Первоначальная загрузка блоков и объектов
         for row_index, line in enumerate(lines):
+            print(row_index)
             for col_index, symbol in enumerate(line):
                 try:
                     if symbol in cls.SYMBOLS:
@@ -173,8 +176,6 @@ class LevelParser:
                             all_sprites.add(spike)
                 except IndexError:
                     pass
-
-
         # Обновление текстур блоков, платформ и шипов
         for row_index, row in enumerate(block_grid):
             for col_index, block in enumerate(row):

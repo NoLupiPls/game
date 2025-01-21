@@ -1,10 +1,10 @@
 import pygame
-from core.settings import PLAYER_SIZE, PLAYER_COLOR, PLAYER_SPEED, GRAVITY, MAX_FALL_SPEED, JUMP_POWER, WIDTH, HEIGHT
+from core.settings import PLAYER_SIZE, PLAYER_COLOR, PLAYER_SPEED, GRAVITY, MAX_FALL_SPEED, JUMP_POWER, WIDTH, HEIGHT, RED
 from entities.hazards import Spike, Lava
 
 
 class Player:
-    def __init__(self, x, y, difficulty):
+    def __init__(self, x, y, difficulty='easy'):
         """
         Инициализация игрока.
         """
@@ -37,7 +37,9 @@ class Player:
             self.velocity_x = -self.speed
         elif keys[pygame.K_d]:
             self.velocity_x = self.speed
-        elif keys[pygame.K_LSHIFT]:
+        else:
+            self.velocity_x = 0
+        if keys[pygame.K_LSHIFT] and (keys[pygame.K_d] or keys[pygame.K_a]):
             if pygame.time.get_ticks() > self.last_dash_tick + 5000:
                 self.can_dash = True
                 if self.can_dash:
@@ -51,9 +53,8 @@ class Player:
                         self.velocity_x /= 3
                         self.velocity_y /= 3
                     self.last_dash_tick = current_tick
-        else:
-            self.velocity_x = 0
-
+            self.velocity_x *= 3
+            self.velocity_y *= 3
         if (keys[pygame.K_SPACE] or keys[pygame.K_w]) and self.on_ground:
             self.velocity_y = JUMP_POWER  # Прыжок
 
@@ -128,7 +129,7 @@ class Player:
         """
         Проверка вертикальных столкновений с тайлами.
         """
-        for tile in tiles:
+        asdjdsaj = '''for tile in tiles:
             if self.rect.colliderect(tile):
                 if self.velocity_y > 0:  # Падение
                     self.rect.bottom = tile.top
@@ -136,7 +137,7 @@ class Player:
                     self.on_ground = True
                 elif self.velocity_y < 0:  # Прыжок
                     self.rect.top = tile.bottom
-                    self.velocity_y = 0
+                    self.velocity_y = 0'''
 
         # Если не касается плиток, сбрасываем флаг on_ground
         if not any(self.rect.colliderect(tile) for tile in tiles):
