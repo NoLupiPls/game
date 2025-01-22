@@ -2,8 +2,12 @@ import pygame
 import os
 from core.settings import WIDTH, HEIGHT, FPS
 from core.game import Game
+from init import GamePage
 from levels.level_parser import LevelParser
 from ui.menu import Menu
+
+
+
 
 
 def main():
@@ -23,8 +27,13 @@ def main():
     # Объединение всех объектов, с которыми можно взаимодействовать
     collideables = [blocks, platforms, traps]
 
+    def start_game():
+        """Функция, которая будет вызываться при старте игры."""
+        game_page = GamePage(screen)
+        game_page.run()
+
     # Создаем объект игры
-    menu = Menu(screen)
+    menu = Menu(screen, start_game)
     menu_result = menu.run()
 
     # Главный цикл игры
