@@ -1,213 +1,132 @@
-import pygame, sys
-import os
-from core.settings import DIFFICULTY, WIDTH, HEIGHT
-
-sys.path.append('../main.py')
-class Button:
-    def __init__(self, image, pos, text_input, font, base_color, hovering_color):
-        self.image = image
-        self.x_pos = pos[0]
-        self.y_pos = pos[1]
-        self.font = font
-        self.base_color, self.hovering_color = base_color, hovering_color
-        self.text_input = text_input
-        self.text = self.font.render(self.text_input, True, self.base_color)
-        if self.image is None:
-            self.image = self.text
-        self.rect = self.image.get_rect(center=(self.x_pos, self.y_pos))
-        self.text_rect = self.text.get_rect(center=(self.x_pos, self.y_pos))
-
-    def update(self, screen):
-        if self.image is not None:
-            screen.blit(self.image, self.rect)
-        screen.blit(self.text, self.text_rect)
-
-    def checkForInput(self, position):
-        if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top,
-                                                                                          self.rect.bottom):
-            return True
-        return False
-
-    def changeColor(self, position):
-        if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top,
-                                                                                          self.rect.bottom):
-            self.text = self.font.render(self.text_input, True, self.hovering_color)
-        else:
-            self.text = self.font.render(self.text_input, True, self.base_color)
+import pygame
 
 
-pygame.init()
+class Menu:
+    def __init__(self, screen):
+        """
+        Инициализация меню.
+        :param screen: Экран для отрисовки меню.
+        """
+        self.screen = screen
+        self.options = [
+            {"label": "Продолжить", "action": self.resume_game, "enabled": False},
+            {"label": "Новая игра", "action": self.new_game, "enabled": True},
+            {"label": "Уровни", "action": self.show_levels, "enabled": True},
+            {"label": "Настройки", "action": self.show_settings, "enabled": True},
+            {"label": "Выход", "action": self.quit_game, "enabled": True},
+        ]
+        self.selected_index = 1  # Выбор по умолчанию
+        self.font = pygame.font.Font("assets/fonts/comic_sans_pixel.ttf", 28)  # Шрифт
+        self.base_color = (255, 255, 255)
+        self.hover_color = (200, 200, 255)
+        self.disabled_color = (100, 100, 100)
+        self.spacing = 50  # Расстояние между кнопками
+        self.start_x = 30  # Отступ слева
+        self.start_y = 100  # Начальная позиция кнопок
+        self.running = True  # Состояние работы меню
+        self.settings = None
 
-SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Menu")
+    def render_text(self, text, color):
+        """Создаёт текстовую поверхность."""
+        return self.font.render(text, True, color)
 
-BG = pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu', 'menu_background_19201080.png'))
+    def handle_input(self, events):
+        """Обрабатывает ввод с мыши и клавиатуры."""
+        for event in events:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:  # Стрелка вверх
+                    self.selected_index = (self.selected_index - 1) % len(self.options)
+                elif event.key == pygame.K_DOWN:  # Стрелка вниз
+                    self.selected_index = (self.selected_index + 1) % len(self.options)
+                elif event.key == pygame.K_RETURN:  # Enter
+                    if self.options[self.selected_index]["enabled"]:
+                        self.options[self.selected_index]["action"]()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # ЛКМ
+                    mouse_pos = pygame.mouse.get_pos()
+                    for index, option in enumerate(self.options):
+                        label_surface = self.render_text(option["label"], self.base_color)
+                        label_rect = label_surface.get_rect(topleft=(self.start_x, self.start_y + index * self.spacing))
+                        if label_rect.collidepoint(mouse_pos) and option["enabled"]:
+                            option["action"]()
+            elif event.type == pygame.MOUSEWHEEL:  # Прокрутка колесика мыши
+                if event.y > 0:  # Прокрутка вверх
+                    self.selected_index = (self.selected_index - 1) % len(self.options)
+                elif event.y < 0:  # Прокрутка вниз
+                    self.selected_index = (self.selected_index + 1) % len(self.options)
 
-os.path.join('assets', 'fonts', 'mainmenufont.otf')
+        # Обработка движения мыши
+        mouse_pos = pygame.mouse.get_pos()
+        for index, option in enumerate(self.options):
+            label_surface = self.render_text(option["label"], self.base_color)
+            label_rect = label_surface.get_rect(topleft=(self.start_x, self.start_y + index * self.spacing))
+            if label_rect.collidepoint(mouse_pos):
+                self.selected_index = index
 
+    def draw(self):
+        """Отрисовывает меню."""
+        self.screen.fill((0, 0, 0))  # Фон
+        for index, option in enumerate(self.options):
+            # Цвет текста
+            if not option["enabled"]:
+                color = self.disabled_color
+            elif index == self.selected_index:
+                color = self.hover_color
+            else:
+                color = self.base_color
 
-def get_font(size):  # Returns Press-Start-2P in the desired size
-    return pygame.font.Font(os.path.join('assets', 'fonts', 'mainmenufont.otf'), size)
+            # Анимация текста (смещение при наведении)
+            x_offset = 10 if index == self.selected_index else 0
+            label_surface = self.render_text(option["label"], color)
+            self.screen.blit(label_surface, (self.start_x + x_offset, self.start_y + index * self.spacing))
+        pygame.display.flip()
 
+    def run(self):
+        """Запуск меню."""
+        clock = pygame.time.Clock()
+        while self.running:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
+                    self.quit_game()
 
-def rescale_bg():
-    global BG
-    BG = pygame.transform.scale(BG, (WIDTH, HEIGHT))
-def new_game_choose_difficulty():
-    global DIFFICULTY
-    buttons = []
-    while True:
-        NGCD_MOUSE_POS = pygame.mouse.get_pos()
-        SCREEN.blit(BG, (0, 0))
+            # Обработка ввода
+            self.handle_input(events)
 
-        NGCD_TEXT = get_font(100).render("CHOOSE DIFFICULTY", True, "#b68f40")
-        NGCD_RECT = NGCD_TEXT.get_rect(center=(WIDTH // 2, HEIGHT // 3))
-        SCREEN.blit(NGCD_TEXT, NGCD_RECT)
+            # Рисуем меню
+            self.draw()
+            clock.tick(60)
 
-        NGCD_DIFF_MODE_EASY = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
-                                                                'play_button.png')), pos=(WIDTH // 2, HEIGHT // 2),
-                           text_input="EASY", font=get_font(75), base_color="White", hovering_color="Green")
-        buttons.append(NGCD_DIFF_MODE_EASY)
+    # Методы действий меню
+    def resume_game(self):
+        print("Игра продолжается!")
+        # Добавьте здесь логику для продолжения игры
+        self.running = False
 
-        NGCD_DIFF_MODE_MEDIUM = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
-                                                                          'play_button.png')),
-                                     pos=(WIDTH // 2, HEIGHT // 1.575),
-                                     text_input="MEDUIM", font=get_font(75), base_color="White", hovering_color="Green")
-        buttons.append(NGCD_DIFF_MODE_MEDIUM)
+    def new_game(self):
+        print("Начинается новая игра!")
+        # Добавьте здесь логику для запуска новой игры
+        self.running = False
 
-        NGCD_DIFF_MODE_HARD = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
-                                                                          'play_button.png')),
-                                     pos=(WIDTH // 2, HEIGHT // 1.3),
-                                     text_input="HARD", font=get_font(75), base_color="White", hovering_color="Green")
-        buttons.append(NGCD_DIFF_MODE_HARD)
+    def show_levels(self):
+        print("Меню уровней!")
+        # Добавьте здесь логику для отображения уровней
+        self.running = False
 
-        for button in buttons:
-            button.changeColor(NGCD_MOUSE_POS)
-            button.update(SCREEN)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if NGCD_DIFF_MODE_EASY.checkForInput(NGCD_MOUSE_POS):
-                    DIFFICULTY = 'easy' # call game init and terminate menu
-                    exit()
-                if NGCD_DIFF_MODE_MEDIUM.checkForInput(NGCD_MOUSE_POS):
-                    DIFFICULTY = 'meduim' # call game init and terminate menu
-                    exit()
-                if NGCD_DIFF_MODE_HARD.checkForInput(NGCD_MOUSE_POS):
-                    DIFFICULTY = 'hard' # call game init and terminate menu
-                    exit()
-        pygame.display.update()
+    def show_settings(self):
+        print("Меню настроек!")
+        # Добавьте здесь логику для отображения настроек
+        self.open_settings()
 
-def play():
-    buttons = []
-    while True:
-        PLAY_MOUSE_POS = pygame.mouse.get_pos()
+    def quit_game(self):
+        print("Выход из игры!")
+        self.running = False
+        pygame.quit()
+        exit()
 
-        SCREEN.blit(BG, (0, 0))
-
-        LOAD_GAME = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
-                                                                'play_button.png')), pos=(WIDTH // 2, HEIGHT // 2),
-                           text_input="Load game", font=get_font(75), base_color="White", hovering_color="Green")
-        buttons.append(LOAD_GAME)
-        NEW_GAME = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
-                                                                'play_button.png')), pos=(WIDTH // 2, HEIGHT // 3),
-                           text_input="New game", font=get_font(75), base_color="White", hovering_color="Green")
-        buttons.append(NEW_GAME)
-        PLAY_BACK = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
-                                                                'play_button.png')), pos=(WIDTH // 2, HEIGHT // 1.5),
-                           text_input="BACK", font=get_font(75), base_color="White", hovering_color="Green")
-        buttons.append(PLAY_BACK)
-
-        for button in buttons:
-            button.changeColor(PLAY_MOUSE_POS)
-            button.update(SCREEN)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
-                    main_menu_gui()
-                if LOAD_GAME.checkForInput(PLAY_MOUSE_POS):
-                    ...
-                if NEW_GAME.checkForInput(PLAY_MOUSE_POS):
-                    new_game_choose_difficulty()
-
-        pygame.display.update()
-
-
-def options():
-    while True:
-        OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
-
-        SCREEN.fill("white")
-
-        OPTIONS_TEXT = get_font(45).render("This is the OPTIONS screen.", True, "Black")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260))
-        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
-
-        OPTIONS_BACK = Button(image=None, pos=(640, 460),
-                              text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
-
-
-        OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-        OPTIONS_BACK.update(SCREEN)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
-                    main_menu_gui()
-
-        pygame.display.update()
-
-
-def main_menu_gui():
-    rescale_bg()
-    running = True
-    while running:
-        SCREEN.blit(BG, (0, 0))
-
-        MENU_MOUSE_POS = pygame.mouse.get_pos()
-
-        MENU_TEXT = get_font(100).render("Game name", True, "#b68f40")
-        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
-
-        PLAY_BUTTON = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
-                                                                  'play_button.png')),
-                             pos=(WIDTH // 4, HEIGHT // 3),
-                             text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        OPTIONS_BUTTON = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
-                                                                     'menu_options_button.png')),
-                                pos=(WIDTH // 4, HEIGHT // 2),
-                                text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        QUIT_BUTTON = Button(image=pygame.image.load(os.path.join('assets', 'images', 'ui', 'menu',
-                                                                  'menu_quit_button.png')),
-                             pos=(WIDTH // 4, HEIGHT // 1.5),
-                             text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-
-        SCREEN.blit(MENU_TEXT, MENU_RECT)
-
-        for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
-            button.changeColor(MENU_MOUSE_POS)
-            button.update(SCREEN)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    play()
-                if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    options()
-                if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    pygame.quit()
-                    sys.exit()
-
-        pygame.display.update()
+    def open_settings(self):
+        """Открывает экран настроек."""
+        if not self.settings:  # Если настройки еще не созданы
+            from ui.settings import Settings  # Импортируем класс Settings
+            self.settings = Settings(self.screen)  # Создаем объект настроек
+        self.settings.run()  # Запускаем экран настроек
