@@ -2,7 +2,7 @@ import pygame
 
 
 class Menu:
-    def __init__(self, screen):
+    def __init__(self, screen, start_game_callback):
         """
         Инициализация меню.
         :param screen: Экран для отрисовки меню.
@@ -16,7 +16,7 @@ class Menu:
             {"label": "Выход", "action": self.quit_game, "enabled": True},
         ]
         self.selected_index = 1  # Выбор по умолчанию
-        self.font = pygame.font.Font("assets/fonts/comic_sans_pixel.ttf", 28)  # Шрифт
+        self.font = pygame.font.Font("assets/fonts/comic_sans_pixel.ttf", 24)  # Шрифт
         self.base_color = (255, 255, 255)
         self.hover_color = (200, 200, 255)
         self.disabled_color = (100, 100, 100)
@@ -25,6 +25,7 @@ class Menu:
         self.start_y = 100  # Начальная позиция кнопок
         self.running = True  # Состояние работы меню
         self.settings = None
+        self.start_game_callback = start_game_callback
 
     def render_text(self, text, color):
         """Создаёт текстовую поверхность."""
@@ -106,7 +107,7 @@ class Menu:
     def new_game(self):
         print("Начинается новая игра!")
         # Добавьте здесь логику для запуска новой игры
-        self.running = False
+        self.start_game_callback()
 
     def show_levels(self):
         print("Меню уровней!")
