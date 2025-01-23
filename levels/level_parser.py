@@ -131,7 +131,6 @@ class LevelParser:
 
         # Первоначальная загрузка блоков и объектов
         for row_index, line in enumerate(lines):
-            print(row_index)
             for col_index, symbol in enumerate(line):
                 try:
                     if symbol in cls.SYMBOLS:
@@ -185,7 +184,6 @@ class LevelParser:
                     neighbors = cls.get_neighbors(block_grid, row_index, col_index)
                     texture = cls.get_texture(item_type, neighbors)
                     block.update_texture(texture)
-
         return {
             "all_sprites": all_sprites,
             "blocks": blocks,
