@@ -130,4 +130,4 @@ class Menu:
         if not self.settings:  # Если настройки еще не созданы
             from ui.settings import Settings  # Импортируем класс Settings
             self.settings = Settings(self.screen)  # Создаем объект настроек
-        self.settings.run()  # Запускаем экран настроек
+        self.settings.run()

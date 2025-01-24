@@ -13,6 +13,16 @@ class Game:
         self.running = True
         self.clock = pygame.time.Clock()
 
+        self.sound_settings = {
+            "Громкость музыки": 50,
+            "Громкость звуков": 50
+        }
+        self.graphics_settings = {
+            "Режим экрана": "Оконный",
+            "Разрешение": "1920x1080",
+            "Кол-во кадров": "60"
+        }
+
         # Игрок
         self.player = Player(WIDTH // 2, HEIGHT // 2)
 
@@ -74,4 +84,5 @@ class Game:
         pygame.display.set_mode((width, height))
 
         # Применить частоту кадров
+
         pygame.time.Clock().tick(int(self.graphics_settings["Кол-во кадров"]))

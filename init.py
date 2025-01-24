@@ -22,7 +22,7 @@ class GamePage:
         """Обработка событий в игре."""
         for event in events:
             if event.type == pygame.QUIT:
-                self.running = False  # Передаем событие в игру
+                self.running = False 
 
     def update(self):
         """Обновление состояния игры."""

@@ -1,16 +1,21 @@
-import pygame, os
+import pygame
+import os
 from core.settings import WIDTH, HEIGHT, FPS
 from core.game import Game
 from init import GamePage
 from ui.menu import Menu
 from levels.level_parser import LevelParser
+from ui.menu import Menu
+
+
+
 
 
 def main():
     # Инициализация Pygame
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))  # Создаем окно
-    pygame.display.set_caption("Celeste-like Game")  # Устанавливаем заголовок окна
+    pygame.display.set_caption("Game")  # Устанавливаем заголовок окна
     clock = pygame.time.Clock()  # Таймер для контроля FPS
 
     levelparse = LevelParser.parse_level(os.path.join('tests', 'level.txt'))
@@ -47,9 +52,11 @@ def main():
         all_sprites.draw(screen)
         game.player.render(screen, FPS)
         pygame.display.flip()
-        # Ограничиваем FPS
+
+        # Ограничение FPS
         clock.tick(FPS)
-    # Завершаем Pygame
+
+    # Завершение Pygame
     pygame.quit()
 
 
