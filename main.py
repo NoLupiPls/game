@@ -3,6 +3,7 @@ import os
 from core.settings import WIDTH, HEIGHT, FPS
 from core.game import Game
 from init import GamePage
+from ui.menu import Menu
 from levels.level_parser import LevelParser
 from ui.menu import Menu
 
@@ -17,44 +18,39 @@ def main():
     pygame.display.set_caption("Game")  # Устанавливаем заголовок окна
     clock = pygame.time.Clock()  # Таймер для контроля FPS
 
-    # Парсим уровень
-    level_data = LevelParser.parse_level(os.path.join('tests', 'level.txt'))
-    all_sprites = level_data['all_sprites']
-    blocks = level_data['blocks']
-    platforms = level_data['platform']
-    traps = level_data['traps']
+    levelparse = LevelParser.parse_level(os.path.join('tests', 'level.txt'))
+    all_sprites = levelparse['all_sprites']
 
-    # Объединение всех объектов, с которыми можно взаимодействовать
-    collideables = [blocks, platforms, traps]
+    blocks = levelparse['blocks']
+    platforms = levelparse['platform']
+    traps = levelparse['traps']
+    # Создаем объект игры
 
+    collideables = [blocks]
+    # Главный цикл игры
     def start_game():
         """Функция, которая будет вызываться при старте игры."""
         game_page = GamePage(screen)
         game_page.run()
 
-    # Создаем объект игры
-    menu = Menu(screen, start_game)
-    menu_result = menu.run()
+    game = Game(screen)
 
-    # Главный цикл игры
+    # Создаем объект игры
+    #menu = Menu(screen, start_game)
+    #menu_result = menu.run()
     running = True
     while running:
         # Обработка событий
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            else:
-                game.handle_event(event, collideables)
-
-        # Обновление состояния игры
-        game.update(collideables)
-
-        # Рендеринг
-        screen.fill((0, 0, 0))  # Очистка экрана
-        all_sprites.draw(screen)  # Отрисовка всех спрайтов
-        game.draw()  # Дополнительный рендеринг игрового интерфейса
-
-        # Обновление дисплея
+        game.handle_event(event, collideables, FPS)  # Передаем событие в игру
+        game.player.render(screen, FPS)
+        game.aaaaaaaa(collideables)
+        # Обновляем состояние игры
+        # Обновляем экран
+        all_sprites.draw(screen)
+        game.player.render(screen, FPS)
         pygame.display.flip()
 
         # Ограничение FPS
