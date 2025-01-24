@@ -13,6 +13,16 @@ class Game:
         self.running = True
         self.clock = pygame.time.Clock()
 
+        self.sound_settings = {
+            "Громкость музыки": 50,
+            "Громкость звуков": 50
+        }
+        self.graphics_settings = {
+            "Режим экрана": "Оконный",
+            "Разрешение": "1920x1080",
+            "Кол-во кадров": "60"
+        }
+
         # Игрок
         self.player = Player(WIDTH // 2, HEIGHT // 2,)
 
@@ -31,3 +41,36 @@ class Game:
             print(i)
             self.player.update(i)
         self.player.render(self.screen)
+
+    def apply_settings(self, sound_settings, graphics_settings):
+        """Применение настроек к текущей игре."""
+        # Сохраняем новые настройки
+        self.sound_settings = sound_settings
+        self.graphics_settings = graphics_settings
+
+        # Применяем звуковые и графические настройки
+        self.apply_sound_settings()
+        self.apply_graphics_settings()
+
+    def apply_sound_settings(self):
+        """Применение звуковых настроек."""
+        pygame.mixer.music.set_volume(self.sound_settings["Громкость музыки"] / 100)
+        # Если в игре есть звуковые эффекты, можно их также настроить
+        # Для этого используется pygame.mixer.Sound и выставляется громкость на аналогичное значение.
+
+    def apply_graphics_settings(self):
+        """Применение графических настроек (например, изменение разрешения или режима окна)."""
+        if self.graphics_settings["Режим экрана"] == "Полноэкранный":
+            pygame.display.set_mode((self.screen.get_width(), self.screen.get_height()), pygame.FULLSCREEN)
+        else:
+            pygame.display.set_mode((self.screen.get_width(), self.screen.get_height()))
+
+        # Применить разрешение
+        resolution = self.graphics_settings["Разрешение"].split("x")
+        width, height = int(resolution[0]), int(resolution[1])
+        pygame.display.set_mode((width, height))
+
+        # Применить частоту кадров
+        pygame.time.Clock().tick(int(self.graphics_settings["Кол-во кадров"]))
+
+
