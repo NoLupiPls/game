@@ -4,6 +4,7 @@ from core.settings import WIDTH, HEIGHT, FPS
 from core.game import Game
 from levels.level_parser import LevelParser
 
+
 class GamePage:
     def __init__(self, screen):
         self.screen = screen
@@ -21,8 +22,7 @@ class GamePage:
         """Обработка событий в игре."""
         for event in events:
             if event.type == pygame.QUIT:
-                self.running = False
-            self.game.handle_event(event, self.collideables)  # Передаем событие в игру
+                self.running = False 
 
     def update(self):
         """Обновление состояния игры."""

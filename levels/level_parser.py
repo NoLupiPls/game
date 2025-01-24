@@ -86,6 +86,7 @@ class LevelParser:
             "top_left_right": "assets/images/platform/blocks/stone_brick/stone_brick_atlr.png",
             "angle_bottom_left_right": "assets/images/platform/blocks/stone_brick/stone_brick_ablr.png",
 
+
         },
         # Платформы
         "wood_platform": {
@@ -178,7 +179,6 @@ class LevelParser:
                     texture = cls.get_texture(item_type, neighbors)
                     # Применяем текстуру к блоку
                     block.update_texture(texture)
-
         return {
             "all_sprites": all_sprites,
             "blocks": blocks,

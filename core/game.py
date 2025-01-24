@@ -1,5 +1,5 @@
 import pygame
-from core.settings import BACKGROUND_COLOR, PLAYER_SIZE, PLAYER_COLOR, PLAYER_SPEED, WIDTH, HEIGHT
+from core.settings import BACKGROUND_COLOR, PLAYER_COLOR, PLAYER_SPEED, WIDTH, HEIGHT
 from entities.player import Player
 import ui.pause_menu
 
@@ -24,23 +24,36 @@ class Game:
         }
 
         # Игрок
-        self.player = Player(WIDTH // 2, HEIGHT // 2,)
+        self.player = Player(WIDTH // 2, HEIGHT // 2)
 
-    def handle_event(self, event, cldb):
-        if event.type == pygame.KEYDOWN:
-            keys = pygame.key.get_pressed()
-            self.player.handle_input(keys)
-            if keys[pygame.K_ESCAPE]:
-                ui.pause_menu.main(self.screen)
+        self.sound_settings = {
+            "Громкость музыки": 50,
+            "Громкость звуков": 50
+        }
+        self.graphics_settings = {
+            "Режим экрана": "Оконный",
+            "Разрешение": "1920x1080",
+            "Кол-во кадров": "60"
+        }
+
+    def aaaaaaaa(self, cldb):
+        for i in cldb:
+            self.player.update(i)
+
+    def handle_event(self, event, cldb, fps):
+        keys = pygame.key.get_pressed()
+        self.player.handle_input(keys)
+        if keys[pygame.K_ESCAPE]:
+            ui.pause_menu.main(self.screen)
         """
         Основное обновление состояния игры.
         """
         background = pygame.Surface((WIDTH, HEIGHT))
         self.screen.blit(background, (0, 0))
         for i in cldb:
-            print(i)
             self.player.update(i)
-        self.player.render(self.screen)
+        self.player.render(self.screen, fps)
+        print(self.player.rect.x, self.player.rect.y)
 
     def apply_settings(self, sound_settings, graphics_settings):
         """Применение настроек к текущей игре."""
@@ -71,6 +84,5 @@ class Game:
         pygame.display.set_mode((width, height))
 
         # Применить частоту кадров
+
         pygame.time.Clock().tick(int(self.graphics_settings["Кол-во кадров"]))
-
-
