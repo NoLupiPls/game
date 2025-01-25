@@ -36,9 +36,33 @@ class Game:
             "Кол-во кадров": "60"
         }
 
-    def aaaaaaaa(self, cldb):
-        for i in cldb:
-            self.player.update(i)
+    def draw_hearts(self):
+        heart = pygame.image.load('assets/images/ui/heart/sprite_heart0.png')
+        depleted_heart = pygame.image.load('assets/images/ui/heart/sprite_heart1.png')
+        heart = pygame.transform.scale(heart, (WIDTH // 28, HEIGHT // 14))
+        if self.player.difficulty == 'easy':
+            if self.player.hp == 3:
+                self.screen.blit(heart, (WIDTH // 3.33, HEIGHT // 1.3))
+                self.screen.blit(heart, (WIDTH // 4, HEIGHT // 1.3))
+                self.screen.blit(heart, (WIDTH // 5, HEIGHT // 1.3))
+            if self.player.hp == 2:
+                self.screen.blit(heart, (WIDTH // 3.33, HEIGHT // 1.3))
+                self.screen.blit(heart, (WIDTH // 4, HEIGHT // 1.3))
+                self.screen.blit(depleted_heart, (WIDTH // 5, HEIGHT // 1.3))
+            if self.player.hp == 1:
+                self.screen.blit(heart, (WIDTH // 3.33, HEIGHT // 1.3))
+                self.screen.blit(depleted_heart,(WIDTH // 4, HEIGHT // 1.3))
+                self.screen.blit(depleted_heart, (WIDTH // 5, HEIGHT // 1.3))
+        elif self.player.difficulty == 'medium':
+            if self.player.hp == 2:
+                self.screen.blit(heart, (WIDTH // 3.33, HEIGHT // 1.3))
+                self.screen.blit(heart, (WIDTH // 4, HEIGHT // 1.3))
+            if self.player.hp == 1:
+                self.screen.blit(heart, (WIDTH // 3.33, HEIGHT // 1.3))
+                self.screen.blit(depleted_heart, (WIDTH // 4, HEIGHT // 1.3))
+        elif self.player.difficulty == 'hard':
+            if self.player.hp == 1:
+                self.screen.blit(heart, (WIDTH // 3.33, HEIGHT // 1.3))
 
     def handle_event(self, event, cldb, fps):
         keys = pygame.key.get_pressed()
@@ -53,7 +77,6 @@ class Game:
         for i in cldb:
             self.player.update(i)
         self.player.render(self.screen, fps)
-        print(self.player.rect.x, self.player.rect.y)
 
     def apply_settings(self, sound_settings, graphics_settings):
         """Применение настроек к текущей игре."""

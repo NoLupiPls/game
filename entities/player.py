@@ -9,6 +9,7 @@ class Player:
         """
         Инициализация игрока.
         """
+        self.difficulty = difficulty
         running_animation = [pygame.image.load("assets/images/player/run/{}.png".format(name)).convert()
                                   for name in ('0', '1', '2', '3', '4', '5', '6', '7', '8',
                                                '9', '10', '11', '12', '13', '14', '15')]
@@ -25,7 +26,7 @@ class Player:
         dash_animation = [pygame.image.load("assets/images/player/dash/{}.png".format(name)).convert()
                                   for name in ('0', '1', '2', '3', '4', '5', '6')]
         self.dash_animation = cycle(dash_animation)
-        self.dash_frame_duration = 1 / 3
+        self.dash_frame_duration = 1 / 8
         self.rect = pygame.Rect(x, y, PLAYER_SIZE_X, PLAYER_SIZE_Y)  # Прямоугольник игрока
         self.color = PLAYER_COLOR  # Цвет игрока
         self.speed = PLAYER_SPEED  # Скорость игрока
@@ -33,7 +34,7 @@ class Player:
         self.velocity_y = 0        # Вертикальная скорость
         self.image = pygame.image.load("assets/images/player/idle/0.png")
         self.image_run = pygame.image.load("assets/images/player/run/0.png")
-        self.on_ground = False     # Флаг, находится ли игрок на земле
+        self.on_ground = True     # Флаг, находится ли игрок на земле
         self.damage_inflictable = True # Флаг, может ли игрок получать урон
         self.hp = 0                # Здоровье игрока
         self.can_dash = True
@@ -73,9 +74,11 @@ class Player:
                     if self.facing == 'l':
                         self.velocity_x = -30
                         self.velocity_y = -30
+                        self.on_ground = False
                     if self.facing == 'r':
                         self.velocity_x = 30
                         self.velocity_y = -30
+                        self.on_ground = False
         if keys[pygame.K_w] and self.on_ground:
             self.velocity_y -= JUMP_POWER  # Прыжок
 
@@ -83,7 +86,7 @@ class Player:
         """
         Применение гравитации.
         """
-        if not self.on_ground:
+        if self.on_ground is False:
             self.velocity_y += GRAVITY
             if self.velocity_y > MAX_FALL_SPEED:
                 self.velocity_y = MAX_FALL_SPEED
@@ -101,7 +104,6 @@ class Player:
         self.rect.y += self.velocity_y
         self.apply_gravity()
         self.check_vertical_collisions(tiles)
-
         # Ограничиваем игрока в пределах экрана
         if self.rect.y < 0:
             self.rect.y = 0
@@ -118,11 +120,14 @@ class Player:
         """
         for tile in tiles:
             if self.rect.colliderect(tile):
-                if self.velocity_x > 0:  # Движение вправо
-                    self.rect.right = tile.rect.left
+                if self.velocity_x > 0:
+                    if self.rect.y - PLAYER_SIZE_Y >= tile.rect.y: # Движение вправо
+                        self.rect.right = tile.rect.left
                 elif self.velocity_x < 0:  # Движение влево
-                    self.rect.left = tile.rect.right
-
+                    if (self.rect.y - PLAYER_SIZE_Y >= tile.rect.y
+                            and ((tile.rect.x, tile.rect.y) != (self.rect.x, self.rect.y))):
+                        self.rect.left = tile.rect.right
+                    tile.update_texture('assets/images/debug_block/debug_block.png')
     def traps_collisions(self, traps):
         """
         Проверка столкновений с шипами и лавой.
@@ -138,17 +143,6 @@ class Player:
                         current_tick = pygame.time.get_ticks()
                         if current_tick >= current_tick_invul + 3000:
                             self.damage_inflictable = True
-                elif type(trap) is Lava:
-                    self.hp -= 1
-                    self.speed -= 2
-                    if self.damage_inflictable:
-                        current_tick_invul = pygame.time.get_ticks()
-                        self.damage_inflictable = False
-                    else:
-                        current_tick = pygame.time.get_ticks()
-                        if current_tick >= current_tick_invul + 3000:
-                            self.damage_inflictable = True
-                            self.speed += 2
 
     def check_vertical_collisions(self, tiles):
         """
@@ -156,7 +150,7 @@ class Player:
         """
         for tile in tiles:
             if self.rect.colliderect(tile):
-                if self.velocity_y > 0:  # Падение
+                if self.velocity_y >= 0:  # Падение
                     self.rect.bottom = tile.rect.top
                     self.velocity_y = 0
                     self.on_ground = True
@@ -164,6 +158,7 @@ class Player:
                 elif self.velocity_y < 0:  # Прыжок
                     self.rect.top = tile.rect.bottom
                     self.velocity_y = 0
+                    self.on_ground = False
 
         # Если не касается плиток, сбрасываем флаг on_ground
         if not any(self.rect.colliderect(tile) for tile in tiles):
@@ -175,7 +170,6 @@ class Player:
         """
         dt = 1 / fps
         self.timer += dt
-        print(self.is_dashing)
         if self.velocity_x:
             if self.is_dashing:
                 while self.timer >= self.dash_frame_duration:
@@ -183,6 +177,7 @@ class Player:
                     self.image = next(self.dash_animation)
                     if self.facing == 'l':
                         self.image = pygame.transform.flip(self.image, True, False)
+                    self.image = pygame.transform.scale(self.image, (PLAYER_SIZE_X, PLAYER_SIZE_Y))
                     screen.blit(self.image, self.rect)
                 else:
                     screen.blit(self.image, self.rect)
@@ -192,6 +187,7 @@ class Player:
                     self.image_run = next(self.running_animation)
                     if self.facing == 'l':
                         self.image_run = pygame.transform.flip(self.image_run, True, False)
+                    self.image_run = pygame.transform.scale(self.image_run, (PLAYER_SIZE_X, PLAYER_SIZE_Y))
                     screen.blit(self.image_run, self.rect)
                 else:
                     screen.blit(self.image_run, self.rect)
@@ -199,6 +195,7 @@ class Player:
             while self.timer >= self.idle_frame_duration:
                 self.timer -= self.idle_frame_duration
                 self.image = next(self.idle_animation)
+                self.image = pygame.transform.scale(self.image, (PLAYER_SIZE_X, PLAYER_SIZE_Y))
                 screen.blit(self.image, self.rect)
             else:
                 screen.blit(self.image, self.rect)

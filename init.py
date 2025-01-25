@@ -9,13 +9,7 @@ class GamePage:
     def __init__(self, screen):
         self.screen = screen
         self.clock = pygame.time.Clock()
-        self.levelparse = LevelParser.parse_level(os.path.join('tests', 'level.txt'))
-        self.all_sprites = self.levelparse['all_sprites']
-        self.blocks = self.levelparse['blocks']
-        self.platforms = self.levelparse['platform']
-        self.traps = self.levelparse['traps']
         self.game = Game(screen)
-        self.collideables = [self.blocks, self.platforms, self.traps]
         self.running = True
 
     def handle_events(self, events):
@@ -26,11 +20,9 @@ class GamePage:
 
     def update(self):
         """Обновление состояния игры."""
-        self.all_sprites.update()
 
     def draw(self):
         """Отображение на экране."""
-        self.all_sprites.draw(self.screen)
         pygame.display.flip()
 
     def run(self):

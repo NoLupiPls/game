@@ -26,7 +26,7 @@ def main():
     traps = levelparse['traps']
     # Создаем объект игры
 
-    collideables = [blocks]
+    collideables = [all_sprites]
     # Главный цикл игры
     def start_game():
         """Функция, которая будет вызываться при старте игры."""
@@ -46,11 +46,11 @@ def main():
                 running = False
         game.handle_event(event, collideables, FPS)  # Передаем событие в игру
         game.player.render(screen, FPS)
-        game.aaaaaaaa(collideables)
         # Обновляем состояние игры
         # Обновляем экран
         all_sprites.draw(screen)
         game.player.render(screen, FPS)
+        game.draw_hearts()
         pygame.display.flip()
 
         # Ограничение FPS
