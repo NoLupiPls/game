@@ -36,10 +36,11 @@ class Game:
             "Кол-во кадров": "60"
         }
 
-    def draw_hearts(self):
+    def draw_ui(self):
         heart = pygame.image.load('assets/images/ui/heart/sprite_heart0.png')
         depleted_heart = pygame.image.load('assets/images/ui/heart/sprite_heart1.png')
         heart = pygame.transform.scale(heart, (WIDTH // 28, HEIGHT // 14))
+        depleted_heart = pygame.transform.scale(depleted_heart, (WIDTH // 28, HEIGHT // 14))
         if self.player.difficulty == 'easy':
             if self.player.hp == 3:
                 self.screen.blit(heart, (WIDTH // 3.33, HEIGHT // 1.3))

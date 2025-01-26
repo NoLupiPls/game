@@ -2,6 +2,7 @@ import random
 import os
 import pygame
 from core.structure_platforms import Block
+from core.structure_platforms import End
 from core.structure_platforms import Platform
 from entities.hazards import Spike
 
@@ -11,6 +12,7 @@ class LevelParser:
     SCREEN_HEIGHT = 22  # Количество блоков по высоте
 
     SYMBOLS = {
+        "E": "end",
         "G": "dirt",          # Грязь
         "I": "ice",           # Лёд
         "L": "ladder",         # Каркас
@@ -85,8 +87,9 @@ class LevelParser:
             "angle_top_bottom_right": "assets/images/platform/blocks/stone_brick/stone_brick_tbr.png",
             "top_left_right": "assets/images/platform/blocks/stone_brick/stone_brick_atlr.png",
             "angle_bottom_left_right": "assets/images/platform/blocks/stone_brick/stone_brick_ablr.png",
-
-
+        },
+        "end": {
+            "default": "assets/images/platform/blocks/end/end.png"
         },
         # Платформы
         "wood_platform": {
@@ -160,6 +163,12 @@ class LevelParser:
                         traps.add(spike)
                         all_sprites.add(spike)
 
+                    elif item_type == "end":
+                        end = End(x, y, cls.TILE_SIZE, cls.TEXTURE_PATHS[item_type]["default"])
+                        block_grid[row_index + 1][col_index + 1] = end
+                        blocks.add(end)
+                        all_sprites.add(end)
+
         # Добавляем дополнительные блоки по краям (невидимая зона)
         for row_index, row in enumerate(block_grid):
             for col_index, block in enumerate(row):
@@ -230,9 +239,9 @@ class LevelParser:
             elif neighbors["left"] and neighbors["right"]: # Горизонтальный блок
                 return cls.TEXTURE_PATHS[item_type]["horizontal"]
             elif neighbors["left"]: # Правый блок
-                return cls.TEXTURE_PATHS[item_type]["left"]
-            elif neighbors["right"]: # Левый блок
                 return cls.TEXTURE_PATHS[item_type]["right"]
+            elif neighbors["right"]: # Левый блок
+                return cls.TEXTURE_PATHS[item_type]["left"]
 
             
             elif neighbors["bottom"] and neighbors["left"]: # Угловой блок
@@ -273,5 +282,7 @@ class LevelParser:
             else:
                 return cls.TEXTURE_PATHS[item_type]["default"]
 
+        if item_type == "end":
+            return cls.TEXTURE_PATHS[item_type]["default"]
+
         return cls.TEXTURE_PATHS[item_type]["default"]
-    

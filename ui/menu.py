@@ -23,7 +23,7 @@ class Menu:
         self.spacing = 50  # Расстояние между кнопками
         self.start_x = 30  # Отступ слева
         self.start_y = 100  # Начальная позиция кнопок
-        self.running = True  # Состояние работы меню
+        self.running_menu = True  # Состояние работы меню
         self.settings = None
         self.start_game_callback = start_game_callback
 
@@ -82,37 +82,21 @@ class Menu:
             self.screen.blit(label_surface, (self.start_x + x_offset, self.start_y + index * self.spacing))
         pygame.display.flip()
 
-    def run(self):
-        """Запуск меню."""
-        clock = pygame.time.Clock()
-        while self.running:
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.QUIT:
-                    self.quit_game()
-
-            # Обработка ввода
-            self.handle_input(events)
-
-            # Рисуем меню
-            self.draw()
-            clock.tick(60)
-
     # Методы действий меню
     def resume_game(self):
         print("Игра продолжается!")
         # Добавьте здесь логику для продолжения игры
-        self.running = False
+        self.running_menu = False
 
     def new_game(self):
         print("Начинается новая игра!")
         # Добавьте здесь логику для запуска новой игры
-        self.start_game_callback()
+        self.running_menu = False
 
     def show_levels(self):
         print("Меню уровней!")
         # Добавьте здесь логику для отображения уровней
-        self.running = False
+        self.running_menu = False
 
     def show_settings(self):
         print("Меню настроек!")
@@ -121,13 +105,13 @@ class Menu:
 
     def quit_game(self):
         print("Выход из игры!")
-        self.running = False
+        self.running_menu = False
         pygame.quit()
         exit()
 
     def open_settings(self):
         """Открывает экран настроек."""
         if not self.settings:  # Если настройки еще не созданы
-            from ui.settings import Settings  # Импортируем класс Settings
-            self.settings = Settings(self.screen)  # Создаем объект настроек
+            from ui.settings import SettingsPage  # Импортируем класс Settings
+            self.settings = SettingsPage(self.screen)  # Создаем объект настроек
         self.settings.run()

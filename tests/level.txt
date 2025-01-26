@@ -1,11 +1,11 @@
 BBBBBBBBBBBBBBBBBBBBBBBBBBB
 BBBBBBBBBBBBBBBBBBBBBBBBBBB
 BBBBBBBBBBBBBBBBBBBBBBBBBBB
-BBBBBBBB...............BBBB
 BBBB...................BBBB
-BBBB.......................
-BBBB.......................
-BBBB.......................
+BBBB...................BBBB
+E......................BBBB
+E......................BBBB
+E....BBBB..............BBBB
 BBBBBBBBBBBBBBBBB......BBBB
 BBBBBBBBBBBBBBBBBSSSSSSBBBB
 BBBBBBBBBBBBBBBBBBBBBBBBBBB

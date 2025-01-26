@@ -185,12 +185,10 @@ class SettingsPage:
 
     def open_menu(self):
         """Открывает экран настроек."""
-        if not self.menu:  # Если настройки еще не созданы
-            from ui.menu import Menu  # Импортируем класс Menu
-            self.menu = Menu(self.screen)  # Создаем объект настроек
-        self.menu.run()  # Запускаем экран настроек
+        from ui.menu import Menu
+        self.menu = Menu(self.screen, "idk what's the format for this")  # Создаем объект настроек
+           # Запускаем экран настроек
+        self.menu.draw()
 
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-settings = SettingsPage(screen)
-settings.run()
+
+

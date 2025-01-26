@@ -11,11 +11,12 @@ GRAY = (50, 50, 50)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+GOLDEN = (255, 215, 0)
 BACKGROUND_COLOR = (30, 30, 30)  # Фон (темно-серый)
 
 # Настройки игрока
 PLAYER_SIZE_X = 24          # Размер игрока (высота персонажа)
-PLAYER_SIZE_Y = 36
+PLAYER_SIZE_Y = 48
 PLAYER_COLOR = WHITE      # Цвет игрока
 PLAYER_SPEED = 5          # Скорость игрока (пикселей за тик)
 
@@ -33,4 +34,4 @@ MUSIC_DIR = ASSETS_DIR + "music/"    # Папка с музыкой
 # Прочие настройки
 GRAVITY = 1.5             # Сила гравитации
 MAX_FALL_SPEED = 10       # Максимальная скорость падения
-JUMP_POWER = -300          # Сила прыжка
+JUMP_POWER = 15          # Сила прыжка
