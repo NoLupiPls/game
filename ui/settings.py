@@ -170,12 +170,13 @@ class SettingsPage:
     def run(self):
         """Запуск настроек."""
         clock = pygame.time.Clock()
-        while True:
+        self.running_menu = True
+        while self.running_menu:
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    self.running_menu = False
             self.handle_input(events)
             self.screen.fill((0, 0, 0))  # Очищаем экран
             self.draw_tabs()
@@ -186,9 +187,10 @@ class SettingsPage:
     def open_menu(self):
         """Открывает экран настроек."""
         from ui.menu import Menu
-        self.menu = Menu(self.screen, "idk what's the format for this")  # Создаем объект настроек
+        self.menu = Menu(self.screen, "idk what's the format for this", True)  # Создаем объект настроек
            # Запускаем экран настроек
         self.menu.draw()
+        self.running_menu = False
 
 
 

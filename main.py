@@ -108,7 +108,6 @@ def main():
                 game.player.set_coords(WIDTH // 2, HEIGHT // 2)
                 levelparse = LevelParser.parse_level(levels[1])
                 all_sprites = levelparse['all_sprites']
-                collideables = [all_sprites]
             else:
                 game_going = False
                 pygame.display.flip()

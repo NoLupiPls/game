@@ -72,6 +72,13 @@ class Player:
             self.facing = 'r'
         else:
             self.velocity_x = 0
+        if keys[pygame.K_w]:
+            if pygame.time.get_ticks() > self.last_jump_tick + 1000:
+                self.can_dash = True
+                if self.can_dash:
+                    self.last_jump_tick = pygame.time.get_ticks()
+                    self.can_jump = False
+                    self.velocity_y = -JUMP_POWER
         if keys[pygame.K_LSHIFT] and (keys[pygame.K_d] or keys[pygame.K_a]):
             if pygame.time.get_ticks() > self.last_dash_tick + 1500:
                 self.can_dash = True
@@ -211,7 +218,6 @@ class Player:
         Отрисовка игрока.
         """
         dt = 1 / fps
-        print(self.on_ground)
         self.timer += dt
         self.screen = screen
         self.fps = fps

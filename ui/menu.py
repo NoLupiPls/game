@@ -1,8 +1,10 @@
 import pygame
 
+from core.settings import WIDTH, HEIGHT
+
 
 class Menu:
-    def __init__(self, screen, start_game_callback):
+    def __init__(self, screen, start_game_callback, settings_callback=False):
         """
         Инициализация меню.
         :param screen: Экран для отрисовки меню.
@@ -26,6 +28,7 @@ class Menu:
         self.running_menu = True  # Состояние работы меню
         self.settings = None
         self.start_game_callback = start_game_callback
+        self.settings_callback = settings_callback # передаваемый параметр из меню настроек,
 
     def render_text(self, text, color):
         """Создаёт текстовую поверхность."""
@@ -44,12 +47,15 @@ class Menu:
                         self.options[self.selected_index]["action"]()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # ЛКМ
-                    mouse_pos = pygame.mouse.get_pos()
-                    for index, option in enumerate(self.options):
-                        label_surface = self.render_text(option["label"], self.base_color)
-                        label_rect = label_surface.get_rect(topleft=(self.start_x, self.start_y + index * self.spacing))
-                        if label_rect.collidepoint(mouse_pos) and option["enabled"]:
-                            option["action"]()
+                    if not self.settings_callback:
+                        mouse_pos = pygame.mouse.get_pos()
+                        for index, option in enumerate(self.options):
+                            label_surface = self.render_text(option["label"], self.base_color)
+                            label_rect = label_surface.get_rect(topleft=(self.start_x, self.start_y + index * self.spacing))
+                            if label_rect.collidepoint(mouse_pos) and option["enabled"]:
+                                option["action"]()
+                    else:
+                        self.settings_callback = False
             elif event.type == pygame.MOUSEWHEEL:  # Прокрутка колесика мыши
                 if event.y > 0:  # Прокрутка вверх
                     self.selected_index = (self.selected_index - 1) % len(self.options)
@@ -66,7 +72,9 @@ class Menu:
 
     def draw(self):
         """Отрисовывает меню."""
-        self.screen.fill((0, 0, 0))  # Фон
+        background = pygame.image.load('assets/images/backgrounds/forest/background.png')
+        background = pygame.transform.scale(background, (WIDTH, HEIGHT))
+        self.screen.blit(background, (0, 0))  # Фон
         for index, option in enumerate(self.options):
             # Цвет текста
             if not option["enabled"]:
